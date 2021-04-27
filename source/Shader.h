@@ -19,13 +19,13 @@
 class Shader
 {
 private:
-	unsigned int id = 0;
+	unsigned int id;
 
 	unsigned int loadShader(GLenum shaderType, std::string filePath);
 	void linkProgram(unsigned int vertexShader, unsigned int fragmentShader);
 
 public:
-
+	Shader();
 	Shader(std::string vertexFile, std::string fragmentFile);
 	~Shader();
 

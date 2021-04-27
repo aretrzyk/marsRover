@@ -84,15 +84,28 @@ Camera::Camera(GLFWwindow* window)
 {
 	this->windowPtr = window;
 
-	this->cameraPosition = glm::vec3(0.0f, 0.0f, 10.0f);
-	this->cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-	this->cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	this->cameraPosition = glm::vec3(0.f, 0.f, 10.f);
+	this->cameraFront = glm::vec3(0.f, 0.f, -1.f);
+	this->cameraUp = glm::vec3(0.f, 1.f, 0.f);
+	this->cameraSpeed = 3.f;
+	
+	this->fov = 120.f;
+	this->nearPlane = 0.1f;
+	this->farPlane = 1000.f;
+
+	this->yaw = 0;
+	this->pitch = 0;
 
 	this->ViewMatrix = glm::mat4(1.0f);
 	this->ProjectionMatrix = glm::mat4(1.0f);
 	
 	this->currentFrameTime = glfwGetTime();
 	this->previousFrameTime = this->currentFrameTime;
+	this->dt = this->previousFrameTime - this->currentFrameTime;
+
+	this->firstMove = true;
+
+	this->ViewMatrix = glm::lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp);
 }
 
 void Camera::update(Shader* program)
@@ -105,6 +118,16 @@ void Camera::update(Shader* program)
 	this->updateProjectionMatrix();
 	program->setUni4fm("ViewMatrix", this->ViewMatrix);
 	program->setUni4fm("ProjectionMatrix", this->ProjectionMatrix);
+}
+
+glm::mat4 Camera::projectionMatrix()
+{
+	return this->ProjectionMatrix;
+}
+
+glm::mat4 Camera::viewMatrix()
+{
+	return this->ViewMatrix;
 }
 
 

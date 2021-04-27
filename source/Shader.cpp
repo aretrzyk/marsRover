@@ -48,8 +48,13 @@ void Shader::linkProgram(unsigned int vertexShader, unsigned int fragmentShader)
 		glGetProgramInfoLog(this->id, errorLength, &errorLength, errorMessage);
 		std::cout << errorMessage << std::endl;
 	}
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	//glDeleteShader(vertexShader);
+	//glDeleteShader(fragmentShader);
+}
+
+Shader::Shader()
+{
+	
 }
 
 Shader::Shader(std::string vertexFile, std::string fragmentFile)
