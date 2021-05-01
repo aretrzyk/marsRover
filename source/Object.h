@@ -1,60 +1,40 @@
 #pragma once
-#include "Camera.h"
-
-struct Vertex
-{
-	glm::vec3 position;
-	glm::vec3 color;
-	glm::vec2 texcoord;
-
-public:
-	Vertex()
-	{
-		this->position = glm::vec3(0,0,0);
-		this->color = glm::vec3(0,0,0);
-		this->texcoord = glm::vec3(0,0,0);
-	}
-	Vertex(glm::vec3 pos, glm::vec3 color, glm::vec2 tex)
-	{
-		this->position = pos;
-		this->color = color;
-		this->texcoord = tex;
-	}
-	bool operator==(Vertex vertex)
-	{
-		if (this->position == vertex.position)
-			if (this->color == vertex.color)
-				return true;
-		return false;
-	}
-
-	friend std::ostream& operator<<(std::ostream& stream, const Vertex vertex);
-};
-
-
+#include <istream>
+#include <sstream>
+#include <vector>
+#include "Shader.h"
+//#include "Texture.h"
 
 class Object
 {
 private:
-	Vertex* vertices;
-	unsigned int* indices;
-	int vnr;
-	unsigned int inr;
+	std::vector<glm::vec3> verticles;
+	std::vector<GLuint> elements;
 
-	void addIndex(int i);
-	void addVertex(Vertex vertex);
+	Shader* shader;
+	//Texture texture;
+
+	//to samo co unsigned int
+	GLuint VAO;
+	GLuint VBO;
+	GLuint EBO;
+
+	glm::vec3 translationVec;
+	glm::vec3 rotationVec;
+	glm::vec3 scaleVec;
+
+	glm::mat4 modelMatrix;
+
 
 public:
 	Object();
-	void appendVertex(Vertex vertex);
-	void appendVertex(int i);
-	Vertex* ver();
-	unsigned int* ind();
-	int vNr();
-	unsigned int iNr();
-	glm::vec3 pos(int number);
-	int ind(int i);
+	void move(glm::vec3 vec);
+	void rotate(glm::vec3 vec);
+	void scale(glm::vec3 vec);
 
-	void outputToFile(std::string path);
+	void loadFromFile(std::string path);
+
+	void draw(glm::mat4 ViewMatrix, glm::mat4 ProjectionMatrix);
+
 };
 

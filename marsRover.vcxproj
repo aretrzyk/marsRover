@@ -146,15 +146,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\Camera.cpp" />
+    <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\Object.cpp" />
     <ClCompile Include="source\Shader.cpp" />
+    <ClCompile Include="source\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Camera.h" />
-    <ClInclude Include="source\libs.h" />
+    <ClInclude Include="source\Game.h" />
     <ClInclude Include="source\Object.h" />
     <ClInclude Include="source\Shader.h" />
+    <ClInclude Include="source\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\basicFShader.frag" />

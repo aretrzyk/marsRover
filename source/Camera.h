@@ -7,17 +7,17 @@ private:
 	glm::vec3 cameraPosition;
 	glm::vec3 cameraFront;
 	glm::vec3 cameraUp;
-	float cameraSpeed = 3;
+	float cameraSpeed;
 
-	float fov = 45.f;
-	float nearPlane = 0.1f;
-	float farPlane = 100.f;
+	float fov;
+	float nearPlane;
+	float farPlane;
 
 	glm::mat4 ViewMatrix;
 	glm::mat4 ProjectionMatrix;
 
-	float yaw = 0;
-	float pitch = 0;
+	float yaw;
+	float pitch;
 
 	double lastPosX;
 	double lastPosY;
@@ -27,7 +27,7 @@ private:
 	float previousFrameTime;
 
 
-	bool firstMove = true;
+	bool firstMove;
 
 	GLFWwindow* windowPtr;
 
@@ -40,5 +40,8 @@ private:
 public:
 	Camera(GLFWwindow* window);
 	void update(Shader* program);
+
+	glm::mat4 projectionMatrix();
+	glm::mat4 viewMatrix();
 	
 };
