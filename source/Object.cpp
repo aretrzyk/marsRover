@@ -9,12 +9,12 @@ Object::Object()
 
     glGenBuffers(1, &this->VBO);
     glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
 
     glGenBuffers(1, &this->EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
-    glBindVertexArray(this->VAO);
+    glBindVertexArray(0);
 
 	this->translationVec = glm::vec3(1.0f);
 	this->rotationVec = glm::vec3(1.0f);
@@ -40,6 +40,11 @@ void Object::scale(glm::vec3 vec)
 	this->modelMatrix = glm::scale(this->modelMatrix, this->scaleVec);
 }
 
+void Object::setColor(glm::vec4 color)
+{
+    this->shader->setUni4fv("color", color);
+}
+
 void Object::loadFromFile(std::string path)
 {
     std::ifstream file(path);
@@ -58,7 +63,7 @@ void Object::loadFromFile(std::string path)
             ss >> vec.x; 
             ss >> vec.y; 
             ss >> vec.z;
-            verticles.push_back(vec);
+            vertices.push_back(vec);
         }
         else if (line.substr(0, 2) == "f ")
         {
@@ -72,41 +77,68 @@ void Object::loadFromFile(std::string path)
             c--;
             elements.push_back(a); elements.push_back(b); elements.push_back(c);
         }
+        /*else if (line.substr(0, 2) == "vn ")
+        {
+            std::istringstream ss(line.substr(2));
+            GLfloat a, b, c;
+            ss >> a;
+            ss >> b;
+            ss >> c;
+            this->normals.push_back(glm::vec3(a, b, c));
+            this->normals.push_back(glm::vec3(a, b, c));
+            this->normals.push_back(glm::vec3(a, b, c));
+        }*/
         /* anything else is ignored */
     }
-    glBindVertexArray(this->VAO);
 
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * this->verticles.size(), this->verticles.data(), GL_STATIC_DRAW);
+    //this->normals.resize(this->vertices.size());
+    for (int i = 0; i < this->elements.size(); i += 3)
+    {
+        /*GLushort ia = elements[i];
+        GLushort ib = elements[i + 1];
+        GLushort ic = elements[i + 2];
+        glm::vec3 normal = glm::normalize(glm::cross(
+            glm::vec3(this->vertices[ib]) - glm::vec3(this->vertices[ia]),
+            glm::vec3(this->vertices[ic]) - glm::vec3(this->vertices[ia])));*/
+
+        this->normals.push_back(glm::vec3(1.f));
+        this->normals.push_back(glm::vec3(1.f));
+        this->normals.push_back(glm::vec3(1.f));
+
+    }
+
+    glBindVertexArray(this->VAO);
+    
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), 0);
+    //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (const GLvoid*)(this->vertices.size()/2 * sizeof(glm::vec3)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (const GLvoid*)(this->vertices.size() * sizeof(glm::vec3)));
+
+
+    //glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * (this->vertices.size()), this->vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * (this->vertices.size() + this->normals.size()), 0, GL_STATIC_DRAW);
+
+    glBufferSubData(GL_ARRAY_BUFFER, 0, this->vertices.size() * sizeof(glm::vec3), this->vertices.data());
+    glBufferSubData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(glm::vec3), this->normals.size() * sizeof(glm::vec3), this->normals.data());
 
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * this->elements.size(), this->elements.data(), GL_STATIC_DRAW);
 
     glBindVertexArray(0);
 
-
-    /*normals.resize(vertices.size(), glm::vec3(0.0, 0.0, 0.0));
-    for (int i = 0; i < elements.size(); i += 3)
-    {
-        GLushort ia = elements[i];
-        GLushort ib = elements[i + 1];
-        GLushort ic = elements[i + 2];
-        glm::vec3 normal = glm::normalize(glm::cross(
-            glm::vec3(vertices[ib]) - glm::vec3(vertices[ia]),
-            glm::vec3(vertices[ic]) - glm::vec3(vertices[ia])));
-        normals[ia] = normals[ib] = normals[ic] = normal;
-    }*/
 }
 
-void Object::draw(glm::mat4 ViewMatrix, glm::mat4 ProjectionMatrix)
+void Object::draw(glm::mat4 ViewMatrix, glm::mat4 ProjectionMatrix, glm::vec3 cameraPos)
 {
     glBindVertexArray(this->VAO);
 
     this->shader->setUni4fm("ModelMatrix", this->modelMatrix);
     this->shader->setUni4fm("ViewMatrix", ViewMatrix);
     this->shader->setUni4fm("ProjectionMatrix", ProjectionMatrix);
+    this->shader->setUni3fv("cameraPos", cameraPos);
+    lightPos = glm::vec3(10* sin(glfwGetTime()), 10, cos(glfwGetTime()) * 10);
+    this->shader->setUni3fv("lightPos", lightPos);
     this->shader->use();
     glDrawElements(GL_TRIANGLES, this->elements.size(), GL_UNSIGNED_INT, 0);
-    std::cout << glGetError() << std::endl;
-    //this->shader.unuse();
+    this->shader->unuse();
 
     glBindVertexArray(0);
    

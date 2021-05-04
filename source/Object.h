@@ -8,8 +8,9 @@
 class Object
 {
 private:
-	std::vector<glm::vec3> verticles;
+	std::vector<glm::vec3> vertices;
 	std::vector<GLuint> elements;
+	std::vector<glm::vec3> normals;
 
 	Shader* shader;
 	//Texture texture;
@@ -25,6 +26,7 @@ private:
 
 	glm::mat4 modelMatrix;
 
+	glm::vec3 lightPos;
 
 public:
 	Object();
@@ -32,9 +34,11 @@ public:
 	void rotate(glm::vec3 vec);
 	void scale(glm::vec3 vec);
 
+	void setColor(glm::vec4 color);
+
 	void loadFromFile(std::string path);
 
-	void draw(glm::mat4 ViewMatrix, glm::mat4 ProjectionMatrix);
+	void draw(glm::mat4 ViewMatrix, glm::mat4 ProjectionMatrix, glm::vec3 cameraPos);
 
 };
 

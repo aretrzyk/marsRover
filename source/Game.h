@@ -17,9 +17,6 @@ private:
 	//Kamera
 	Camera* camera;
 
-	//Shadery
-	Shader* coreProgram;
-
 	Object* test;
 
 public:
