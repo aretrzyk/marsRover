@@ -1,8 +1,6 @@
 #pragma once
-#include "Camera.h"
-#include "Shader.h"
 #include "Object.h"
-
+#include "Camera.h"
 
 class Game
 {
@@ -18,11 +16,19 @@ private:
 	Camera* camera;
 
 	Object* test;
+	Object* floor;
+	Object* sun;
+
+	void objectsInit();
+	void drawObjects();
 
 public:
 	Game();
+	~Game();
 	GLFWwindow* getWindow();
 	void run();
 
+	glm::vec3 getLightPos()const;
+	glm::vec3 getLightColor()const;
 };
 

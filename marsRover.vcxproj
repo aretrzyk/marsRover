@@ -78,6 +78,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <SourcePath>$(SoultionDir)source;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -145,19 +146,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\Base.cpp" />
     <ClCompile Include="source\Camera.cpp" />
     <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\Object.cpp" />
+    <ClCompile Include="source\OBJLoader.cpp" />
     <ClCompile Include="source\Shader.cpp" />
     <ClCompile Include="source\Texture.cpp" />
+    <ClCompile Include="source\Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\Base.h" />
     <ClInclude Include="source\Camera.h" />
     <ClInclude Include="source\Game.h" />
     <ClInclude Include="source\Object.h" />
+    <ClInclude Include="source\OBJLoader.h" />
     <ClInclude Include="source\Shader.h" />
     <ClInclude Include="source\Texture.h" />
+    <ClInclude Include="source\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\basicFShader.frag" />
