@@ -9,8 +9,8 @@ Game::Game()
 	}
 
 	//Ustawienia GLFW
-	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
 	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
@@ -37,19 +37,16 @@ Game::Game()
 	GLenum err = glewInit();
 	if (GLEW_NO_ERROR != err)
 	{
-		//problem glewInit b³¹d, coœ jest na prawdê Ÿle
-		/* Problem: glewInit failed, something is seriously wrong. */
-		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+		std::cout << "GLEW ERROR " << glewGetErrorString(err) << std::endl;
 	}
 	std::cout << glGetString(GL_VERSION) << std::endl;
 	std::cout << "Using GLEW: " << glewGetString(GLEW_VERSION) << std::endl;
-	;
 
 	//OPEN GL OPTIONS
 	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_CULL_FACE);
-	//glEnable(GL_BACK);
-	//glFrontFace(GL_CCW);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_BACK);
+	glFrontFace(GL_CCW);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -59,10 +56,6 @@ Game::Game()
 	//Camera
 	glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	this->camera = new Camera(this->window);
-	
-
-	//Shader
-	this->coreProgram = new Shader("res/shaders/basicVShader.vert", "res/shaders/basicFShader.frag");
 	
 	this->test = new Object();
 	this->test->loadFromFile("res/models/domeczek.obj");
@@ -76,9 +69,10 @@ GLFWwindow* Game::getWindow()
 void Game::run()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	this->camera->update(this->coreProgram);
-	//this->coreProgram->use();
-	test->draw(this->camera->viewMatrix(), this->camera->projectionMatrix());
+	this->camera->update();
+
+	this->test->setColor(glm::vec4(0.2, 0.8, 0.2, 1));
+	this->test->draw(this->camera->viewMatrix(), this->camera->projectionMatrix(), this->camera->pos());
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();

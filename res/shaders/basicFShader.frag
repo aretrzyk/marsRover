@@ -1,15 +1,37 @@
 #version 440
+layout(location = 0) in vec3 position;
+layout(location = 1) in vec3 normal;
 
-//in vec3 vs_posiiton;
-//in vec3 vs_color;
-//in vec2 vs_texcoord;
+out vec4 fs_color;
 
-out vec4 color;
-
+uniform vec4 color;
+uniform vec3 lightPos;
+uniform vec3 cameraPos;
 uniform sampler2D texture0;
+
+
 
 void main()
 {
-	color = vec4(0.6f, 0.6f, 0.6f, 1.0f);
-	//fs_color = texture(texture0, vs_texcoord);
+
+	vec3 lightColor = vec3(1.0, 1.0, 1.0);
+	//vec3 lightPos = vec3(-10, 30, 10);
+	vec3 norm = normalize(normal);
+	vec3 lightDir = normalize(lightPos - position);
+
+	float diff = max(dot(normal, lightDir), 0.0);
+	vec3 diffuse = diff * lightColor;
+
+	float ambientStrength = 0.1;
+    vec3 ambient = ambientStrength * lightColor;
+
+	float specularStrength = 0.5;
+
+	vec3 viewDir = normalize(cameraPos - position);
+	vec3 reflectDir = reflect(-lightDir, normal);
+
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 2);
+	vec3 specular = specularStrength * spec * lightColor;
+
+	fs_color = vec4(diffuse + ambient + specular, 1.0) * color;
 }

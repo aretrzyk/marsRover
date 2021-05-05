@@ -1,23 +1,22 @@
 #version 440 
 
 layout(location = 0) in vec3 vertex_position;
-//layout(location = 1) in vec3 vertex_color;
-//layout(location = 2) in vec2 vertex_texcoord;
-
-out vec3 vs_position;
-//out vec3 vs_color;
-//out vec2 vs_texcoord;
+layout(location = 1) in vec3 vertex_normal;
 
 uniform mat4 ModelMatrix;
 uniform mat4 ViewMatrix;
 uniform mat4 ProjectionMatrix;
 
+layout(location = 0) out vec3 position;
+layout(location = 1) out vec3 normal;
+
 void main()
 {
-	vs_position = vec4(ModelMatrix * vec4(vertex_position, 1.0f)).xyz;
-	//vs_color = vertex_color;
-	//vs_texcoord = vertex_texcoord;
-
-	gl_Position = ModelMatrix * ProjectionMatrix * ViewMatrix * vec4(vertex_position, 1.0f);
-	//gl_Position = vec4(vertex_position, 1.0f);
+	position = vec4(ModelMatrix * vec4(vertex_position, 1.0f)).xyz;
+	normal = mat3(transpose(inverse(ModelMatrix))) * vertex_normal;  
+	if (vertex_normal.x == 0)
+		gl_Position = vec4(0);
+	else
+		gl_Position = ModelMatrix * ProjectionMatrix * ViewMatrix * vec4(vertex_position, 1.0f);
+	
 }

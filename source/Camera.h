@@ -39,9 +39,11 @@ private:
 	void updateProjectionMatrix();
 public:
 	Camera(GLFWwindow* window);
-	void update(Shader* program);
+	void update();
 
 	glm::mat4 projectionMatrix();
 	glm::mat4 viewMatrix();
+
+	glm::vec3 pos();
 	
 };

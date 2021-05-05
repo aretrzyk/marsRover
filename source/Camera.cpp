@@ -2,27 +2,33 @@
 
 void Camera::updatePos()
 {
+	//Zczytywanie aktualnej pozycji kursora
 	double currPosX;
 	double currPosY;
 	glfwGetCursorPos(this->windowPtr, &currPosX, &currPosY);
-
+	//std::cout << currPosX << "," << currPosY << std::endl;
+	//Zabezpieczenie przezd nag³ym skokiem kamery gry pierwszy raz ni¹ ruszamy
+	//Pasowa³by zrobic ¿e kamera startuje skierowana na œrodek a nie trzeba ruszac i szukaæ œrodka i obiektu
 	if (this->firstMove)
 	{
-		lastPosX = currPosX;
-		lastPosX = currPosY;
-		firstMove = false;
+		this->lastPosX = currPosX;
+		this->lastPosX = currPosY;
+		this->firstMove = false;
 	}
-	float mouseOffsetX = currPosX - lastPosX;
-	float mouseOffsetY = currPosY - lastPosY;
-	lastPosX = currPosX;
-	lastPosY = currPosY;
+	//Obliczenie jaki ruch wykona³a myszka
+	float mouseOffsetX = currPosX - this->lastPosX;
+	float mouseOffsetY = currPosY - this->lastPosY;
+	this->lastPosX = currPosX;
+	this->lastPosY = currPosY;
 
+	//Uwzglêdnienie czu³oœci
 	const float sensitivity = 0.1f;
 	mouseOffsetX *= sensitivity;
 	mouseOffsetY *= sensitivity;
 
-	yaw += mouseOffsetX;
-	pitch += mouseOffsetY;
+	//Nowe k¹ty obrotu dla kamery
+	this->yaw += mouseOffsetX;
+	this->pitch += mouseOffsetY;
 }
 
 void Camera::updateDeltaTime()
@@ -50,10 +56,12 @@ void Camera::updateInputs()
 
 void Camera::updateCamera()
 {
+	//Blokada przed z³amaniem sobie karku
 	if (this->pitch > 89.0f)
 		this->pitch = 89.f;
 	if (this->pitch < -89.f)
 		this->pitch = -89.f;
+
 	glm::vec3 cameraDirection;
 	cameraDirection.x = cos(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
 	cameraDirection.y = -sin(glm::radians(this->pitch));
@@ -99,6 +107,9 @@ Camera::Camera(GLFWwindow* window)
 	this->ViewMatrix = glm::mat4(1.0f);
 	this->ProjectionMatrix = glm::mat4(1.0f);
 	
+	this->lastPosX = 0;
+	this->lastPosY = 0;
+
 	this->currentFrameTime = glfwGetTime();
 	this->previousFrameTime = this->currentFrameTime;
 	this->dt = this->previousFrameTime - this->currentFrameTime;
@@ -108,7 +119,7 @@ Camera::Camera(GLFWwindow* window)
 	this->ViewMatrix = glm::lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp);
 }
 
-void Camera::update(Shader* program)
+void Camera::update()
 {
 	this->updatePos();
 	this->updateDeltaTime();
@@ -116,8 +127,6 @@ void Camera::update(Shader* program)
 	this->updateCamera();
 	this->updateViewMatrix();
 	this->updateProjectionMatrix();
-	program->setUni4fm("ViewMatrix", this->ViewMatrix);
-	program->setUni4fm("ProjectionMatrix", this->ProjectionMatrix);
 }
 
 glm::mat4 Camera::projectionMatrix()
@@ -128,6 +137,11 @@ glm::mat4 Camera::projectionMatrix()
 glm::mat4 Camera::viewMatrix()
 {
 	return this->ViewMatrix;
+}
+
+glm::vec3 Camera::pos()
+{
+	return this->cameraPosition;
 }
 
 
