@@ -65,7 +65,11 @@ Game::Game()
 	this->coreProgram = new Shader("res/shaders/basicVShader.vert", "res/shaders/basicFShader.frag");
 	
 	this->test = new Object();
+<<<<<<< Updated upstream
 	this->test->loadFromFile("res/models/rover.obj");
+=======
+	this->test->loadFromFile("res/models/superlazik.obj");
+>>>>>>> Stashed changes
 }
 
 GLFWwindow* Game::getWindow()
