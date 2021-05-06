@@ -1,5 +1,48 @@
 #include "Game.h"
 
+void Game::objectsInit()
+{
+
+	OBJLoader vCube("res/models/cube.obj");
+	OBJLoader vFloor("res/models/testFloor.obj");
+	OBJLoader vRover("res/models/lazik.obj");
+
+	this->test = new Object;
+	this->test->load(vRover.getVertices());
+
+	this->test->setColor(glm::vec3(0.2, 0.8, 0.2));
+	this->test->move(glm::vec3(0.0, 2, 0.0));
+
+
+	this->sun = new Object;
+	this->sun->load(vCube.getVertices());
+
+	//this->sun->scale(glm::vec3(0.1f));
+	this->sun->setColor(glm::vec4(Base::lightColor, 0.5));
+	
+	this->floor = new Object;
+	this->floor->load(vFloor.getVertices());
+
+	this->floor->setColor(glm::vec3(1, 0.2, 0.2));
+	this->floor->move(glm::vec3(0, 0, 0));
+}
+
+void Game::drawObjects()
+{
+	this->test->draw();
+
+	float x = 20 * cos(glfwGetTime());
+	float z = 5 * sin(glfwGetTime());
+
+	Base::lightPos = glm::vec3(x, 5, z);
+	
+	this->sun->rotate(glm::vec3(0.1f, 0.1f, 0.1f));
+	this->sun->move(Base::lightPos + glm::vec3(0.f, 2.f, 0.f));
+	this->sun->draw();
+
+	this->floor->draw();
+}
+
 Game::Game()
 {
 	//Inicjalizacja GLFW
@@ -57,8 +100,14 @@ Game::Game()
 	glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	this->camera = new Camera(this->window);
 	
-	this->test = new Object();
-	this->test->loadFromFile("res/models/domeczek.obj");
+	this->objectsInit();
+}
+
+Game::~Game()
+{
+	delete this->camera;
+	delete this->test;
+	delete this->floor;
 }
 
 GLFWwindow* Game::getWindow()
@@ -71,9 +120,9 @@ void Game::run()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	this->camera->update();
 
-	this->test->setColor(glm::vec4(0.2, 0.8, 0.2, 1));
-	this->test->draw(this->camera->viewMatrix(), this->camera->projectionMatrix(), this->camera->pos());
+	this->drawObjects();
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();
 }
+

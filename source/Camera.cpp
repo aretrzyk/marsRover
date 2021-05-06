@@ -35,23 +35,23 @@ void Camera::updateDeltaTime()
 {
 	this->previousFrameTime = this->currentFrameTime;
 	this->currentFrameTime = glfwGetTime();
-	this->dt = this->currentFrameTime - this->previousFrameTime;
+	Base::dt = this->currentFrameTime - this->previousFrameTime;
 }
 
 void Camera::updateInputs()
 {
 	if (glfwGetKey(this->windowPtr, GLFW_KEY_W) == GLFW_PRESS)
-		this->cameraPosition += glm::normalize(this->cameraFront) * this->cameraSpeed * this->dt;
+		Base::cameraPos += glm::normalize(this->cameraFront) * this->cameraSpeed * Base::dt;
 	if (glfwGetKey(this->windowPtr, GLFW_KEY_S) == GLFW_PRESS)
-		this->cameraPosition -= glm::normalize(this->cameraFront) * this->cameraSpeed * this->dt;
+		Base::cameraPos -= glm::normalize(this->cameraFront) * this->cameraSpeed * Base::dt;
 	if (glfwGetKey(this->windowPtr, GLFW_KEY_SPACE) == GLFW_PRESS)
-		this->cameraPosition += glm::normalize(this->cameraUp) * this->cameraSpeed * this->dt;
+		Base::cameraPos += glm::normalize(this->cameraUp) * this->cameraSpeed * Base::dt;
 	if (glfwGetKey(this->windowPtr, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-		this->cameraPosition -= glm::normalize(this->cameraUp) * this->cameraSpeed * this->dt;
+		Base::cameraPos -= glm::normalize(this->cameraUp) * this->cameraSpeed * Base::dt;
 	if (glfwGetKey(this->windowPtr, GLFW_KEY_D) == GLFW_PRESS)
-		this->cameraPosition += this->cameraSpeed * glm::normalize(glm::cross(this->cameraFront, this->cameraUp)) * this->dt;
+		Base::cameraPos += this->cameraSpeed * glm::normalize(glm::cross(this->cameraFront, this->cameraUp)) * Base::dt;
 	if (glfwGetKey(this->windowPtr, GLFW_KEY_A) == GLFW_PRESS)
-		this->cameraPosition -= this->cameraSpeed * glm::normalize(glm::cross(this->cameraFront, this->cameraUp)) * this->dt;
+		Base::cameraPos -= this->cameraSpeed * glm::normalize(glm::cross(this->cameraFront, this->cameraUp)) * Base::dt;
 }
 
 void Camera::updateCamera()
@@ -71,7 +71,7 @@ void Camera::updateCamera()
 
 void Camera::updateViewMatrix()
 {
-	this->ViewMatrix = glm::lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp);
+	Base::viewMatrix = glm::lookAt(Base::cameraPos, Base::cameraPos + cameraFront, cameraUp);
 }
 
 void Camera::updateProjectionMatrix()
@@ -79,7 +79,7 @@ void Camera::updateProjectionMatrix()
 	int framebufferWidth, framebufferHeight;
 	glfwGetFramebufferSize(this->windowPtr, &framebufferWidth, &framebufferHeight);
 
-	this->ProjectionMatrix = glm::perspective
+	Base::projectionMatrix = glm::perspective
 	(
 		glm::radians(fov),
 		(float)framebufferWidth / (float)framebufferHeight,
@@ -92,31 +92,25 @@ Camera::Camera(GLFWwindow* window)
 {
 	this->windowPtr = window;
 
-	this->cameraPosition = glm::vec3(0.f, 0.f, 10.f);
 	this->cameraFront = glm::vec3(0.f, 0.f, -1.f);
 	this->cameraUp = glm::vec3(0.f, 1.f, 0.f);
-	this->cameraSpeed = 3.f;
+	this->cameraSpeed = 5.f;
 	
-	this->fov = 120.f;
+	this->fov = 90.f;
 	this->nearPlane = 0.1f;
-	this->farPlane = 1000.f;
+	this->farPlane = 100.f;
 
 	this->yaw = 0;
 	this->pitch = 0;
 
-	this->ViewMatrix = glm::mat4(1.0f);
-	this->ProjectionMatrix = glm::mat4(1.0f);
 	
 	this->lastPosX = 0;
 	this->lastPosY = 0;
 
 	this->currentFrameTime = glfwGetTime();
 	this->previousFrameTime = this->currentFrameTime;
-	this->dt = this->previousFrameTime - this->currentFrameTime;
 
 	this->firstMove = true;
-
-	this->ViewMatrix = glm::lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp);
 }
 
 void Camera::update()
@@ -129,19 +123,5 @@ void Camera::update()
 	this->updateProjectionMatrix();
 }
 
-glm::mat4 Camera::projectionMatrix()
-{
-	return this->ProjectionMatrix;
-}
-
-glm::mat4 Camera::viewMatrix()
-{
-	return this->ViewMatrix;
-}
-
-glm::vec3 Camera::pos()
-{
-	return this->cameraPosition;
-}
 
 
