@@ -9,7 +9,6 @@ class Object
 {
 private:
 
-
 	Shader* shader;
 	//Texture texture;
 

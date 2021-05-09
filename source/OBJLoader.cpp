@@ -8,17 +8,69 @@ OBJLoader::OBJLoader(std::string path)
         std::cout << "Cannot open " << path << std::endl;
     }
 
+    bool firstObject = true;
+
+    std::vector<glm::vec3> pos;
+    std::vector<glm::vec2> texcoords;
+    std::vector<glm::vec3> normals;
+
+    std::vector<GLuint> posElements;
+    std::vector<GLint> texcoordsElements;
+    std::vector<GLuint> normalsElements;
+
     std::string line;
     while (getline(file, line))
     {
-        if (line.substr(0, 2) == "v ")
+        if (line.substr(0, 2) == "o ")
+        {
+            if (firstObject)
+            {
+                std::istringstream ss(line.substr(2));
+                std::string objectName;
+                ss >> objectName;
+                this->names.push_back(objectName);
+                firstObject = false;
+                continue;
+            }
+
+            std::vector<Vertex> verticesTemp;
+            for (int i = 0; i < posElements.size(); i++)
+            {
+                Vertex temp;
+                temp.pos = pos[posElements[i]];
+                if (texcoordsElements[i] == -1)
+                    temp.texcoord = glm::vec2(0.f);
+                else
+                    temp.texcoord = texcoords[texcoordsElements[i]];
+                temp.normal = normals[normalsElements[i]];
+                verticesTemp.push_back(temp);
+            }
+
+            this->vertices.push_back(verticesTemp);
+
+            //pos.clear();
+            //texcoords.clear();
+            //normals.clear();
+
+            posElements.clear();
+            texcoordsElements.clear();
+            normalsElements.clear();
+
+            std::istringstream ss(line.substr(2));
+            std::string objectName;
+            ss >> objectName;
+            this->names.push_back(objectName);
+
+        }
+        else if (line.substr(0, 2) == "v ")
         {
             std::istringstream ss(line.substr(2));
             glm::vec3 vec;
             ss >> vec.x;
             ss >> vec.y;
             ss >> vec.z;
-            this->pos.push_back(vec);
+            
+            pos.push_back(vec);
         }
         else if (line.substr(0, 2) == "f ")
         {
@@ -94,15 +146,15 @@ OBJLoader::OBJLoader(std::string path)
             atexcoord--; btexcoord--; ctexcoord--;
             anormal--; bnormal--; cnormal--;
 
-            this->posElements.push_back(a); 
-            this->posElements.push_back(b);
-            this->posElements.push_back(c);
-            this->texcoordsElements.push_back(atexcoord);
-            this->texcoordsElements.push_back(btexcoord);
-            this->texcoordsElements.push_back(ctexcoord);
-            this->normalsElements.push_back(anormal);
-            this->normalsElements.push_back(bnormal);
-            this->normalsElements.push_back(cnormal);
+            posElements.push_back(a); 
+            posElements.push_back(b);
+            posElements.push_back(c);
+            texcoordsElements.push_back(atexcoord);
+            texcoordsElements.push_back(btexcoord);
+            texcoordsElements.push_back(ctexcoord);
+            normalsElements.push_back(anormal);
+            normalsElements.push_back(bnormal);
+            normalsElements.push_back(cnormal);
             
         }
         else if (line.substr(0, 3) == "vn ")
@@ -112,25 +164,48 @@ OBJLoader::OBJLoader(std::string path)
             ss >> a;
             ss >> b;
             ss >> c;
-            this->normals.push_back(glm::vec3(a, b, c));
+            normals.push_back(glm::vec3(a, b, c));
         }
+        else if (line.substr(0, 3) == "vt ")
+        {
+        std::istringstream ss(line.substr(2));
+        GLfloat a, b;
+        ss >> a;
+        ss >> b;
+        texcoords.push_back(glm::vec2(a, b));
+        }
+
     }
 
-    for (int i = 0; i < this->posElements.size(); i++)
+    std::vector<Vertex> verticesTemp;
+    for (int i = 0; i < posElements.size(); i++)
     {
         Vertex temp;
-        temp.pos = this->pos[this->posElements[i]];
-        if(this->texcoordsElements[i] == -1)
+        temp.pos = pos[posElements[i]];
+        if (texcoordsElements[i] == -1)
             temp.texcoord = glm::vec2(0.f);
         else
-            temp.texcoord = this->texcoords[this->texcoordsElements[i]];
-        temp.normal = this->normals[this->normalsElements[i]];
-        this->vertices.push_back(temp);
+            temp.texcoord = texcoords[texcoordsElements[i]];
+        temp.normal = normals[normalsElements[i]];
+        verticesTemp.push_back(temp);
     }
 
+    this->vertices.push_back(verticesTemp);
 }
 
 std::vector<Vertex>& OBJLoader::getVertices()
 {
-	return this->vertices;
+	return this->vertices[0];
+}
+
+std::vector<Vertex>& OBJLoader::getVertices(std::string name)
+{
+    for (int i = 0; i < this->vertices.size(); i++)
+    {
+        if (this->names[i] == name)
+        {
+            return this->vertices[i];
+        }
+    }
+    std::cout << "Cannot find: " << name << std::endl;
 }

@@ -54,7 +54,10 @@ void Shader::linkProgram(unsigned int vertexShader, unsigned int fragmentShader)
 
 Shader::Shader()
 {
-	
+	/*this->id = glCreateProgram();
+	unsigned int vs = this->loadShader(GL_VERTEX_SHADER, "res/shaders/basicVShader.vert");
+	unsigned int fs = this->loadShader(GL_FRAGMENT_SHADER,"res/shaders/basicFShader.frag");
+	this->linkProgram(vs, fs);*/
 }
 
 Shader::Shader(std::string vertexFile, std::string fragmentFile)

@@ -1,5 +1,5 @@
 #pragma once
-#include "Object.h"
+#include "Player.h"
 #include "Camera.h"
 
 class Game
@@ -18,6 +18,7 @@ private:
 	Object* test;
 	Object* floor;
 	Object* sun;
+	Player* rover;
 
 	void objectsInit();
 	void drawObjects();

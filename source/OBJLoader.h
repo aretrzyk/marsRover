@@ -4,18 +4,16 @@
 class OBJLoader
 {
 private:
-	std::vector<Vertex> vertices;
+	std::vector<std::vector<Vertex>> vertices;
+	std::vector<std::string> names;
 
-	std::vector<glm::vec3> pos;
-	std::vector<glm::vec2> texcoords;
-	std::vector<glm::vec3> normals;
-
-	std::vector<GLuint> posElements;
-	std::vector<GLint> texcoordsElements;
-	std::vector<GLuint> normalsElements;
+	
 
 public:
 	OBJLoader(std::string path);
+	//one object
 	std::vector<Vertex>& getVertices();
+	//when you have kilka objects in file
+	std::vector<Vertex>& getVertices(std::string name);
 	
 };

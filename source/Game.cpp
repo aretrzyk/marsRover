@@ -5,13 +5,15 @@ void Game::objectsInit()
 
 	OBJLoader vCube("res/models/cube.obj");
 	OBJLoader vFloor("res/models/testFloor.obj");
-	OBJLoader vRover("res/models/lazik.obj");
+	OBJLoader vRover("res/models/azik47.obj");
+
+	
 
 	this->test = new Object;
-	this->test->load(vRover.getVertices());
+	this->test->load(vRover.getVertices("body"));
 
 	this->test->setColor(glm::vec3(0.2, 0.8, 0.2));
-	this->test->move(glm::vec3(0.0, 2, 0.0));
+	//this->test->move(glm::vec3(0.0, 2, 0.0));
 
 
 	this->sun = new Object;
@@ -25,11 +27,16 @@ void Game::objectsInit()
 
 	this->floor->setColor(glm::vec3(1, 0.2, 0.2));
 	this->floor->move(glm::vec3(0, 0, 0));
+
+	this->rover = new Player(vRover);
+	//this->rover = new Player(vRover.getVertices("body"));
+
 }
 
 void Game::drawObjects()
 {
-	this->test->draw();
+	
+	//this->test->draw();
 
 	float x = 20 * cos(glfwGetTime());
 	float z = 5 * sin(glfwGetTime());
@@ -41,6 +48,9 @@ void Game::drawObjects()
 	this->sun->draw();
 
 	this->floor->draw();
+	//this->rover->head.draw();
+
+	this->rover->draw();
 }
 
 Game::Game()
@@ -106,8 +116,9 @@ Game::Game()
 Game::~Game()
 {
 	delete this->camera;
-	delete this->test;
+	//delete this->test;
 	delete this->floor;
+	delete this->rover;
 }
 
 GLFWwindow* Game::getWindow()

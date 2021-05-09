@@ -23,8 +23,6 @@ Object::Object()
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
 
-    //glGenBuffers(1, &this->EBO);
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
     glBindVertexArray(0);
 
 	this->posVec = glm::vec3(0.0f);
