@@ -152,6 +152,7 @@
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\Object.cpp" />
     <ClCompile Include="source\OBJLoader.cpp" />
+    <ClCompile Include="source\Player.cpp" />
     <ClCompile Include="source\Shader.cpp" />
     <ClCompile Include="source\Texture.cpp" />
     <ClCompile Include="source\Vertex.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="source\Game.h" />
     <ClInclude Include="source\Object.h" />
     <ClInclude Include="source\OBJLoader.h" />
+    <ClInclude Include="source\Player.h" />
     <ClInclude Include="source\Shader.h" />
     <ClInclude Include="source\Texture.h" />
     <ClInclude Include="source\Vertex.h" />

@@ -14,6 +14,6 @@ public:
 	//one object
 	std::vector<Vertex>& getVertices();
 	//when you have kilka objects in file
-	std::vector<Vertex>& getVertices(std::string name);
+	std::vector<Vertex> getVertices(std::string name);
 	
 };

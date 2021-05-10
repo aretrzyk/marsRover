@@ -198,7 +198,7 @@ std::vector<Vertex>& OBJLoader::getVertices()
 	return this->vertices[0];
 }
 
-std::vector<Vertex>& OBJLoader::getVertices(std::string name)
+std::vector<Vertex> OBJLoader::getVertices(std::string name)
 {
     for (int i = 0; i < this->vertices.size(); i++)
     {

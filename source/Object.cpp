@@ -32,15 +32,24 @@ Object::Object()
 	this->modelMatrix = glm::mat4(1.f);
 }
 
+Object::Object(std::vector<Vertex> vertices) : Object()
+{
+    this->load(vertices);
+}
+
+Object::~Object()
+{
+    delete this->shader;
+}
+
+
 void Object::move(glm::vec3 vec)
 {
-    glm::vec3 moveVec = vec - this->posVec;
     this->posVec = vec;
 }
 
 void Object::rotate(glm::vec3 vec)
 {
-    this->modelMatrix = glm::mat4(1.f);
     this->rotationVec += vec;
 }
 
@@ -59,17 +68,18 @@ void Object::setColor(glm::vec4 color)
     this->shader->setUni4fv("color", color);
 }
 
-void Object::load(std::vector<Vertex>& vertices)
+void Object::load(std::vector<Vertex> vertices)
 {
     this->verticesCount = vertices.size();
 
     glBindVertexArray(this->VAO);
-    
+    glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, pos));
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texcoord));
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
 
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices.size(), vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices.size(), vertices.data(), GL_DYNAMIC_DRAW);
 
     glBindVertexArray(0);
 
@@ -88,7 +98,6 @@ void Object::draw()
     this->shader->setUni3fv("lightColor", Base::lightColor);
     this->shader->use();
     glDrawArrays(GL_TRIANGLES, 0, this->verticesCount);
-    //glDrawElements(GL_TRIANGLES, this->elements.size(), GL_UNSIGNED_INT, 0);
     this->shader->unuse();
 
     glBindVertexArray(0);
