@@ -2,45 +2,46 @@
 
 void Game::objectsInit()
 {
-
+	//OBJ loader init
 	OBJLoader vCube("res/models/cube.obj");
 	OBJLoader vFloor("res/models/testFloor.obj");
-	OBJLoader vRover("res/models/lazik.obj");
+	this->vRover = new OBJLoader("res/models/azik47.obj");
 
-	this->test = new Object;
-	this->test->load(vRover.getVertices());
+	//Object init
+	this->rover = new Player(*vRover);
+	this->sun = new Object(vCube.getVertices());
+	//this->sun->load(vCube.getVertices());
+	this->floor = new Object(vFloor.getVertices());
 
-	this->test->setColor(glm::vec3(0.2, 0.8, 0.2));
-	this->test->move(glm::vec3(0.0, 2, 0.0));
+	//Objects presets 
+	//Rover
+	this->rover->move(glm::vec3(0, 10, 0));
 
-
-	this->sun = new Object;
-	this->sun->load(vCube.getVertices());
-
-	//this->sun->scale(glm::vec3(0.1f));
+	//Sun
 	this->sun->setColor(glm::vec4(Base::lightColor, 0.5));
 	
-	this->floor = new Object;
-	this->floor->load(vFloor.getVertices());
-
+	//Floor
 	this->floor->setColor(glm::vec3(1, 0.2, 0.2));
 	this->floor->move(glm::vec3(0, 0, 0));
+
 }
 
 void Game::drawObjects()
 {
-	this->test->draw();
-
 	float x = 20 * cos(glfwGetTime());
 	float z = 5 * sin(glfwGetTime());
 
 	Base::lightPos = glm::vec3(x, 5, z);
-	
+
+	this->rover->draw();
+
+	this->sun->setColor(glm::vec4(Base::lightColor, 0.5));
 	this->sun->rotate(glm::vec3(0.1f, 0.1f, 0.1f));
 	this->sun->move(Base::lightPos + glm::vec3(0.f, 2.f, 0.f));
 	this->sun->draw();
 
 	this->floor->draw();
+
 }
 
 Game::Game()
@@ -106,8 +107,9 @@ Game::Game()
 Game::~Game()
 {
 	delete this->camera;
-	delete this->test;
+	//delete this->test;
 	delete this->floor;
+	delete this->rover;
 }
 
 GLFWwindow* Game::getWindow()

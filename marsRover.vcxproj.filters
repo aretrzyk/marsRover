@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Pliki zasobów\Models">
+      <UniqueIdentifier>{3b75ee23-2c8c-4148-b11f-d65e96cd37bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki zasobów\Shaders">
+      <UniqueIdentifier>{4c29245c-c993-4fe5-b2c6-5e1fb5251418}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Camera.cpp">
@@ -42,6 +48,9 @@
     <ClCompile Include="source\OBJLoader.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="source\Player.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Camera.h">
@@ -68,13 +77,27 @@
     <ClInclude Include="source\OBJLoader.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="source\Player.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\basicFShader.frag">
-      <Filter>Pliki zasobów</Filter>
+      <Filter>Pliki zasobów\Shaders</Filter>
     </None>
     <None Include="res\shaders\basicVShader.vert">
-      <Filter>Pliki zasobów</Filter>
+      <Filter>Pliki zasobów\Shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="res\models\cube.obj">
+      <Filter>Pliki zasobów\Models</Filter>
+    </Object>
+    <Object Include="res\models\lazik.obj">
+      <Filter>Pliki zasobów\Models</Filter>
+    </Object>
+    <Object Include="res\models\testFloor.obj">
+      <Filter>Pliki zasobów\Models</Filter>
+    </Object>
   </ItemGroup>
 </Project>

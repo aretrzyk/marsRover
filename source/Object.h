@@ -9,7 +9,6 @@ class Object
 {
 private:
 
-
 	Shader* shader;
 	//Texture texture;
 
@@ -18,7 +17,6 @@ private:
 	//to samo co unsigned int
 	GLuint VAO;
 	GLuint VBO;
-	GLuint EBO;
 
 	glm::vec3 posVec;
 	glm::vec3 rotationVec;
@@ -32,6 +30,8 @@ private:
 
 public:
 	Object();
+	Object(std::vector<Vertex> vertices);
+	~Object();
 	void move(glm::vec3 vec);
 	void rotate(glm::vec3 vec);
 	void scale(glm::vec3 vec);
@@ -39,7 +39,7 @@ public:
 	void setColor(glm::vec3 color);
 	void setColor(glm::vec4 color);
 
-	void load(std::vector<Vertex>& vertices);
+	void load(std::vector<Vertex> vertices);
 
 	void draw();
 
