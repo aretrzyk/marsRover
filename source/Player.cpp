@@ -64,12 +64,12 @@ void Player::move(glm::vec3 vec)
 
 void Player::draw()
 {
-	//this->frontLeftWheel->rotate(glm::vec3(0, 0, 0.15));
-	//this->frontRightWheel->rotate(glm::vec3(0, 0, -0.13));
-	//this->middleLeftWheel->rotate(glm::vec3(0, 0, -0.16));
-	//this->middleRightWheel->rotate(glm::vec3(0, 0, 0.12));
-	//this->backLeftWheel->rotate(glm::vec3(0, 0, -0.1));
-	//this->backRightWheel->rotate(glm::vec3(0, 0, 0.08));
+	this->frontLeftWheel->rotate(glm::vec3(-0.1, 0, 0));
+	this->frontRightWheel->rotate(glm::vec3(-0.1, 0, 0));
+	this->middleLeftWheel->rotate(glm::vec3(-0.1, 0, 0));
+	this->middleRightWheel->rotate(glm::vec3(-0.1, 0, 0));
+	this->backLeftWheel->rotate(glm::vec3(-0.1, 0, 0));
+	this->backRightWheel->rotate(glm::vec3(-0.1, 0, 0));
 	//this->head->rotate(glm::vec3(0.1, 0.1, 0.1));
 	//this->body->rotate(glm::vec3(1, 1, 1));
 	

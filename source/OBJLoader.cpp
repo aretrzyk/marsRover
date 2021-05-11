@@ -42,9 +42,9 @@ void OBJLoader::buildMesh()
         hitboxTemp.zMax - hitboxTemp.zMin
     );
     hitboxTemp.origin = glm::vec3(
-        hitboxTemp.size.x / 2,
-        hitboxTemp.size.y / 2,
-        hitboxTemp.size.z / 2
+        hitboxTemp.xMax - hitboxTemp.size.x / 2,
+        hitboxTemp.yMax - hitboxTemp.size.y / 2,
+        hitboxTemp.zMax - hitboxTemp.size.z / 2
         );
 
     this->vertices.push_back(verticesTemp);

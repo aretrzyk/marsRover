@@ -14,30 +14,31 @@ void Game::objectsInit()
 
 	//Objects presets 
 	//Rover
-	this->rover->move(glm::vec3(0, 10, 0));
+	this->rover->move(glm::vec3(0, 0, 0));
 
 	//Sun
 	this->sun->setColor(glm::vec4(Base::lightColor, 0.5));
+	this->sun->move(glm::vec3(0, 2, 0));
 	
 	//Floor
 	this->floor->setColor(glm::vec3(1, 0.2, 0.2));
-	this->floor->move(glm::vec3(0, 0, 0));
+	this->floor->setPos(glm::vec3(0, -5, 0));
 
 }
 
 void Game::drawObjects()
 {
-	float x = 20 * cos(glfwGetTime());
-	float z = 5 * sin(glfwGetTime());
+	//float x = 20 * cos(glfwGetTime());
+	//float z = 5 * sin(glfwGetTime());
 
-	Base::lightPos = glm::vec3(x, 5, z);
+	//Base::lightPos = glm::vec3(x, 5, z);
 
 	this->rover->draw();
 
-	this->sun->setColor(glm::vec4(Base::lightColor, 0.5));
-	this->sun->rotate(glm::vec3(0.1f, 0.1f, 0.1f));
-	this->sun->move(Base::lightPos + glm::vec3(0.f, 2.f, 0.f));
-	this->sun->draw();
+	//this->sun->rotate(glm::vec3(0.1f, 0.1f, 0.1f));
+	//this->sun->setPos(Base::lightPos + glm::vec3(0.f, 2.f, 0.f));
+	//this->sun->drawHitbox();
+	//this->sun->draw();
 
 	this->floor->draw();
 

@@ -10,6 +10,7 @@ class Object
 private:
 
 	Shader* shader;
+	Shader* shaderHitbox;
 	//Texture texture;
 
 	unsigned int verticesCount;
@@ -40,7 +41,9 @@ public:
 	Object();
 	Object(std::vector<Vertex> vertices, Hitbox hitbox);
 	~Object();
+	void setPos(glm::vec3 vec);
 	void move(glm::vec3 vec);
+	void setRotation(glm::vec3 vec);
 	void rotate(glm::vec3 vec);
 	void scale(glm::vec3 vec);
 
