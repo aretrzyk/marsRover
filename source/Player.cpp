@@ -2,23 +2,14 @@
 
 void Player::initObjects(OBJLoader& loader)
 {
-	this->head = new Object;
-	this->body = new Object;
-	this->frontLeftWheel = new Object;
-	this->frontRightWheel = new Object;
-	this->middleLeftWheel = new Object;
-	this->middleRightWheel = new Object;
-	this->backLeftWheel = new Object;
-	this->backRightWheel = new Object;
-
-	this->head->load(loader.getVertices("head"));
-	this->body->load(loader.getVertices("body"));
-	this->frontLeftWheel->load(loader.getVertices("frontLeftWheel"));
-	this->frontRightWheel->load(loader.getVertices("frontRightWheel"));
-	this->middleLeftWheel->load(loader.getVertices("middleLeftWheel"));
-	this->middleRightWheel->load(loader.getVertices("middleRightWheel"));
-	this->backLeftWheel->load(loader.getVertices("backLeftWheel"));
-	this->backRightWheel->load(loader.getVertices("backRightWheel"));
+	this->head = new Object(loader.getVertices("head"), loader.getHitboxes("head"));
+	this->body = new Object(loader.getVertices("body"), loader.getHitboxes("body"));
+	this->frontLeftWheel = new Object(loader.getVertices("frontLeftWheel"), loader.getHitboxes("frontLeftWheel"));
+	this->frontRightWheel = new Object(loader.getVertices("frontRightWheel"), loader.getHitboxes("frontRightWheel"));
+	this->middleLeftWheel = new Object(loader.getVertices("middleLeftWheel"), loader.getHitboxes("middleLeftWheel"));
+	this->middleRightWheel = new Object(loader.getVertices("middleRightWheel"), loader.getHitboxes("middleRightWheel"));
+	this->backLeftWheel = new Object(loader.getVertices("backLeftWheel"), loader.getHitboxes("backLeftWheel"));
+	this->backRightWheel = new Object(loader.getVertices("backRightWheel"), loader.getHitboxes("backRightWheel"));
 
 	this->head->setColor(glm::vec4(0.9, 0.3, 0.3, 1));
 	this->body->setColor(glm::vec3(0.3, 0.9, 0.1));
@@ -28,7 +19,6 @@ void Player::initObjects(OBJLoader& loader)
 	this->middleRightWheel->setColor(glm::vec3(0,0,1));
 	this->backLeftWheel->setColor(glm::vec3(0,0,1));
 	this->backRightWheel->setColor(glm::vec3(0,0,1));
-
 }
 
 void Player::drawObjects()
@@ -74,14 +64,24 @@ void Player::move(glm::vec3 vec)
 
 void Player::draw()
 {
-	this->frontLeftWheel->rotate(glm::vec3(0, 0, 0.15));
-	this->frontRightWheel->rotate(glm::vec3(0, 0, -0.13));
-	this->middleLeftWheel->rotate(glm::vec3(0, 0, -0.16));
-	this->middleRightWheel->rotate(glm::vec3(0, 0, 0.12));
-	this->backLeftWheel->rotate(glm::vec3(0, 0, -0.1));
-	this->backRightWheel->rotate(glm::vec3(0, 0, 0.08));
-	this->head->rotate(glm::vec3(0.1, 0.1, 0.1));
-	this->body->rotate(glm::vec3(1, 1, 1));
+	//this->frontLeftWheel->rotate(glm::vec3(0, 0, 0.15));
+	//this->frontRightWheel->rotate(glm::vec3(0, 0, -0.13));
+	//this->middleLeftWheel->rotate(glm::vec3(0, 0, -0.16));
+	//this->middleRightWheel->rotate(glm::vec3(0, 0, 0.12));
+	//this->backLeftWheel->rotate(glm::vec3(0, 0, -0.1));
+	//this->backRightWheel->rotate(glm::vec3(0, 0, 0.08));
+	//this->head->rotate(glm::vec3(0.1, 0.1, 0.1));
+	//this->body->rotate(glm::vec3(1, 1, 1));
 	
+	this->head->drawHitbox();
+	this->body->drawHitbox();
+	this->frontLeftWheel->drawHitbox();
+	this->frontRightWheel->drawHitbox();
+	this->middleLeftWheel->drawHitbox();
+	this->middleRightWheel->drawHitbox();
+	this->backLeftWheel->drawHitbox();
+	this->backRightWheel->drawHitbox();
+
+
 	this->drawObjects();
 }

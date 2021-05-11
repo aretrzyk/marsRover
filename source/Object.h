@@ -17,6 +17,9 @@ private:
 	//to samo co unsigned int
 	GLuint VAO;
 	GLuint VBO;
+	GLuint hitboxVBO;
+
+	glm::vec4 objectColor;
 
 	glm::vec3 posVec;
 	glm::vec3 rotationVec;
@@ -26,11 +29,16 @@ private:
 
 	glm::vec3 lightPos;
 
+	//hitboxes
+	Hitbox hitbox;
+	int hitboxIndicesNumber;
+	glm::vec4 hitboxColor;
+	void loadHitbox();
 	void updateModelMatrix();
 
 public:
 	Object();
-	Object(std::vector<Vertex> vertices);
+	Object(std::vector<Vertex> vertices, Hitbox hitbox);
 	~Object();
 	void move(glm::vec3 vec);
 	void rotate(glm::vec3 vec);
@@ -42,6 +50,7 @@ public:
 	void load(std::vector<Vertex> vertices);
 
 	void draw();
+	void drawHitbox();
 
 };
 
