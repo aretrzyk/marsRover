@@ -18,7 +18,6 @@ private:
 	Object* floor;
 	Object* sun;
 	Player* rover;
-	OBJLoader* vRover;
 
 	void objectsInit();
 	void drawObjects();

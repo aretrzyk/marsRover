@@ -1,5 +1,61 @@
 #include "OBJLoader.h"
 
+void OBJLoader::buildMesh()
+{
+    std::vector<Vertex> verticesTemp;
+    Hitbox hitboxTemp;
+
+    hitboxTemp.xMin = pos[posElements[0]].x;
+    hitboxTemp.xMax = pos[posElements[0]].x;
+
+    hitboxTemp.yMin = pos[posElements[0]].y;
+    hitboxTemp.yMax = pos[posElements[0]].y;
+
+    hitboxTemp.zMin = pos[posElements[0]].z;
+    hitboxTemp.zMax = pos[posElements[0]].z;
+
+    for (int i = 0; i < posElements.size(); i++)
+    {
+        Vertex temp;
+        temp.pos = pos[posElements[i]];
+        if (texcoordsElements[i] == -1)
+            temp.texcoord = glm::vec2(0.f);
+        else
+            temp.texcoord = texcoords[texcoordsElements[i]];
+        temp.normal = normals[normalsElements[i]];
+        verticesTemp.push_back(temp);
+
+        //hitboxes
+        if (hitboxTemp.xMin > pos[posElements[i]].x) hitboxTemp.xMin = pos[posElements[i]].x;
+        if (hitboxTemp.xMax < pos[posElements[i]].x) hitboxTemp.xMax = pos[posElements[i]].x;
+
+        if (hitboxTemp.yMin > pos[posElements[i]].y) hitboxTemp.yMin = pos[posElements[i]].y;
+        if (hitboxTemp.yMax < pos[posElements[i]].y) hitboxTemp.yMax = pos[posElements[i]].y;
+
+        if (hitboxTemp.zMin > pos[posElements[i]].z) hitboxTemp.zMin = pos[posElements[i]].z;
+        if (hitboxTemp.zMax < pos[posElements[i]].z) hitboxTemp.zMax = pos[posElements[i]].z;
+
+    }   
+    hitboxTemp.size = glm::vec3(
+        hitboxTemp.xMax - hitboxTemp.xMin,
+        hitboxTemp.yMax - hitboxTemp.yMin,
+        hitboxTemp.zMax - hitboxTemp.zMin
+    );
+    hitboxTemp.origin = glm::vec3(
+        hitboxTemp.size.x / 2,
+        hitboxTemp.size.y / 2,
+        hitboxTemp.size.z / 2
+        );
+
+    this->vertices.push_back(verticesTemp);
+    this->posElements.clear();
+    this->texcoordsElements.clear();
+    this->normalsElements.clear();
+
+    this->hitboxes.push_back(hitboxTemp);
+
+}
+
 OBJLoader::OBJLoader(std::string path)
 {
     std::ifstream file(path);
@@ -10,13 +66,7 @@ OBJLoader::OBJLoader(std::string path)
 
     bool firstObject = true;
 
-    std::vector<glm::vec3> pos;
-    std::vector<glm::vec2> texcoords;
-    std::vector<glm::vec3> normals;
-
-    std::vector<GLuint> posElements;
-    std::vector<GLint> texcoordsElements;
-    std::vector<GLuint> normalsElements;
+    
 
     std::string line;
     while (getline(file, line))
@@ -32,29 +82,8 @@ OBJLoader::OBJLoader(std::string path)
                 firstObject = false;
                 continue;
             }
-
-            std::vector<Vertex> verticesTemp;
-            for (int i = 0; i < posElements.size(); i++)
-            {
-                Vertex temp;
-                temp.pos = pos[posElements[i]];
-                if (texcoordsElements[i] == -1)
-                    temp.texcoord = glm::vec2(0.f);
-                else
-                    temp.texcoord = texcoords[texcoordsElements[i]];
-                temp.normal = normals[normalsElements[i]];
-                verticesTemp.push_back(temp);
-            }
-
-            this->vertices.push_back(verticesTemp);
-
-            //pos.clear();
-            //texcoords.clear();
-            //normals.clear();
-
-            posElements.clear();
-            texcoordsElements.clear();
-            normalsElements.clear();
+            
+            this->buildMesh();
 
             std::istringstream ss(line.substr(2));
             std::string objectName;
@@ -177,20 +206,11 @@ OBJLoader::OBJLoader(std::string path)
 
     }
 
-    std::vector<Vertex> verticesTemp;
-    for (int i = 0; i < posElements.size(); i++)
-    {
-        Vertex temp;
-        temp.pos = pos[posElements[i]];
-        if (texcoordsElements[i] == -1)
-            temp.texcoord = glm::vec2(0.f);
-        else
-            temp.texcoord = texcoords[texcoordsElements[i]];
-        temp.normal = normals[normalsElements[i]];
-        verticesTemp.push_back(temp);
-    }
+    this->buildMesh();
+    this->pos.shrink_to_fit();
+    this->texcoords.shrink_to_fit();
+    this->normals.shrink_to_fit();
 
-    this->vertices.push_back(verticesTemp);
 }
 
 std::vector<Vertex>& OBJLoader::getVertices()
@@ -198,13 +218,30 @@ std::vector<Vertex>& OBJLoader::getVertices()
 	return this->vertices[0];
 }
 
-std::vector<Vertex> OBJLoader::getVertices(std::string name)
+Hitbox& OBJLoader::getHitboxes()
+{
+    return this->hitboxes[0];
+}
+
+std::vector<Vertex>& OBJLoader::getVertices(std::string name)
 {
     for (int i = 0; i < this->vertices.size(); i++)
     {
         if (this->names[i] == name)
         {
             return this->vertices[i];
+        }
+    }
+    std::cout << "Cannot find: " << name << std::endl;
+}
+
+Hitbox& OBJLoader::getHitboxes(std::string name)
+{
+    for (int i = 0; i < this->hitboxes.size(); i++)
+    {
+        if (this->names[i] == name)
+        {
+            return this->hitboxes[i];
         }
     }
     std::cout << "Cannot find: " << name << std::endl;

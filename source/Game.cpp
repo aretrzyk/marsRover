@@ -5,13 +5,12 @@ void Game::objectsInit()
 	//OBJ loader init
 	OBJLoader vCube("res/models/cube.obj");
 	OBJLoader vFloor("res/models/testFloor.obj");
-	this->vRover = new OBJLoader("res/models/azik47.obj");
+	OBJLoader vRover("res/models/lazik.obj");
 
 	//Object init
-	this->rover = new Player(*vRover);
-	this->sun = new Object(vCube.getVertices());
-	//this->sun->load(vCube.getVertices());
-	this->floor = new Object(vFloor.getVertices());
+	this->rover = new Player(vRover);
+	this->sun = new Object(vCube.getVertices(), vCube.getHitboxes());
+	this->floor = new Object(vFloor.getVertices(), vCube.getHitboxes());
 
 	//Objects presets 
 	//Rover
