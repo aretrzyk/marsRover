@@ -5,7 +5,6 @@
 class Game
 {
 private:
-	GLFWwindow* window;
 	int WINDOW_WIDTH;
 	int WINDOW_HEIGHT;
 	//rozmiar pojedyñczej klatki
@@ -19,13 +18,14 @@ private:
 	Object* sun;
 	Player* rover;
 
+	float test = 0;
+
 	void objectsInit();
 	void drawObjects();
 
 public:
 	Game();
 	~Game();
-	GLFWwindow* getWindow();
 	void run();
 
 	glm::vec3 getLightPos()const;

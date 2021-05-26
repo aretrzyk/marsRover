@@ -3,8 +3,6 @@
 #include "Shader.h"
 //#include "Texture.h"
 
-class Game;
-
 class Object
 {
 private:
@@ -15,42 +13,69 @@ private:
 
 	unsigned int verticesCount;
 
-	//to samo co unsigned int
 	GLuint VAO;
 	GLuint VBO;
 	GLuint hitboxVBO;
 
 	glm::vec4 objectColor;
 
+	glm::mat4 modelMatrix;
+	glm::mat4 rotByOriginMatrix;
+
 	glm::vec3 posVec;
-	glm::vec3 rotationVec;
 	glm::vec3 scaleVec;
 
-	glm::mat4 modelMatrix;
+	glm::vec3 rotVec;
+	glm::vec3 rotByOriginVec;
+	//TODO: add if needed
+	//glm::vec3 vecRotByPoint; 
+	
 
 	glm::vec3 lightPos;
 
-	//hitboxes
 	Hitbox hitbox;
+
 	int hitboxIndicesNumber;
 	glm::vec4 hitboxColor;
+
 	void loadHitbox();
 	void updateModelMatrix();
 
 public:
+	
+
 	Object();
 	Object(std::vector<Vertex> vertices, Hitbox hitbox);
 	~Object();
-	void setPos(glm::vec3 vec);
-	void move(glm::vec3 vec);
-	void setRotation(glm::vec3 vec);
-	void rotate(glm::vec3 vec);
-	void scale(glm::vec3 vec);
+
+	void load(std::vector<Vertex> vertices);
 
 	void setColor(glm::vec3 color);
 	void setColor(glm::vec4 color);
 
-	void load(std::vector<Vertex> vertices);
+	void move(glm::vec3 vec);
+	void setPos(glm::vec3 vec);
+
+	void rot(glm::vec3 angles);
+	void setRot(glm::vec3 angles);
+	void rotByOrigin(glm::vec3 angles);
+	void setRotByOrigin(glm::vec3 angles);
+
+	void rotYaw(float angle);
+	void setRotYaw(float angle);
+
+	void rotByOriginPitch(float angle);
+	void setRotByOriginPitch(float angle);
+
+	void rotByOrigiYaw(float angle);
+	void setRotByOriginYaw(float angle);
+
+
+	glm::vec3 getPos();
+	glm::vec3 getOrigin();
+	glm::vec3 getSize();
+
+
 
 	void draw();
 	void drawHitbox();

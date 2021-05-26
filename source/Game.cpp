@@ -14,7 +14,7 @@ void Game::objectsInit()
 
 	//Objects presets 
 	//Rover
-	this->rover->move(glm::vec3(0, 0, 0));
+	this->rover->move(glm::vec3(0, 1, 0));
 
 	//Sun
 	this->sun->setColor(glm::vec4(Base::lightColor, 0.5));
@@ -22,7 +22,7 @@ void Game::objectsInit()
 	
 	//Floor
 	this->floor->setColor(glm::vec3(1, 0.2, 0.2));
-	this->floor->setPos(glm::vec3(0, -5, 0));
+	this->floor->setPos(glm::vec3(0, 0, 0));
 
 }
 
@@ -33,6 +33,7 @@ void Game::drawObjects()
 
 	//Base::lightPos = glm::vec3(x, 5, z);
 
+	//this->rover->rotateAboutPoint(glm::vec3(0, 100 * Base::dt, 0), glm::vec3(0, 10, 0));
 	this->rover->draw();
 
 	//this->sun->rotate(glm::vec3(0.1f, 0.1f, 0.1f));
@@ -62,8 +63,8 @@ Game::Game()
 	this->WINDOW_HEIGHT = 720;
 	this->WINDOW_WIDTH = 1280;
 
-	this->window = glfwCreateWindow(this->WINDOW_WIDTH, this->WINDOW_HEIGHT, "SRAMROVER", NULL, NULL);
-	if (!this->window)
+	Base::window = glfwCreateWindow(this->WINDOW_WIDTH, this->WINDOW_HEIGHT, "SRAMROVER", NULL, NULL);
+	if (!Base::window)
 	{
 		std::cout << "ERROR CREATING WINDOW" << std::endl;
 		glfwTerminate();
@@ -72,10 +73,10 @@ Game::Game()
 	this->framebufferHeight = 0;
 	this->framebufferWidth = 0;
 
-	glfwGetFramebufferSize(this->window, &framebufferWidth, &framebufferHeight);
+	glfwGetFramebufferSize(Base::window, &framebufferWidth, &framebufferHeight);
 	glViewport(0, 0, framebufferWidth, framebufferHeight);
 
-	glfwMakeContextCurrent(this->window);
+	glfwMakeContextCurrent(Base::window);
 
 	glewExperimental = GL_TRUE;
 	GLenum err = glewInit();
@@ -98,8 +99,8 @@ Game::Game()
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	//Camera
-	glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	this->camera = new Camera(this->window);
+	glfwSetInputMode(Base::window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	this->camera = new Camera();
 	
 	this->objectsInit();
 }
@@ -107,24 +108,22 @@ Game::Game()
 Game::~Game()
 {
 	delete this->camera;
-	//delete this->test;
+	delete this->sun;
 	delete this->floor;
 	delete this->rover;
 }
 
-GLFWwindow* Game::getWindow()
-{
-	return this->window;
-}
 
 void Game::run()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	this->camera->update();
+	this->camera->updateFreeCam();
+	//this->camera->updateThirdPersCam(this->rover->getOrigin(), -this->rover->getYaw() + 90, 30.f);
 
 	this->drawObjects();
+	
 
-	glfwSwapBuffers(window);
+	glfwSwapBuffers(Base::window);
 	glfwPollEvents();
 }
 

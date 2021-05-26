@@ -14,11 +14,11 @@ int main()
 {
 	Game game;
 
-	glfwSetFramebufferSizeCallback(game.getWindow(), framebuffer_size_callback);
+	glfwSetFramebufferSizeCallback(Base::window, framebuffer_size_callback);
 	
-	while (!glfwWindowShouldClose(game.getWindow()))
+	while (!glfwWindowShouldClose(Base::window))
 	{
-		processInput(game.getWindow());
+		processInput(Base::window);
 		game.run();
 	}
 

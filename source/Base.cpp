@@ -1,5 +1,7 @@
 #include "Base.h"
 
+GLFWwindow* Base::window = nullptr;
+
 glm::vec3 Base::lightPos = glm::vec4(0.f, 10.f, 0.f, 1.f);
 glm::vec3 Base::lightColor = glm::vec4(1.f, 1.f, 1.f, 1.f);
 

@@ -41,7 +41,7 @@ void OBJLoader::buildMesh()
         hitboxTemp.yMax - hitboxTemp.yMin,
         hitboxTemp.zMax - hitboxTemp.zMin
     );
-    hitboxTemp.origin = glm::vec3(
+    hitboxTemp.origin = glm::dvec3(
         hitboxTemp.xMax - hitboxTemp.size.x / 2,
         hitboxTemp.yMax - hitboxTemp.size.y / 2,
         hitboxTemp.zMax - hitboxTemp.size.z / 2
@@ -211,6 +211,8 @@ OBJLoader::OBJLoader(std::string path)
     this->texcoords.shrink_to_fit();
     this->normals.shrink_to_fit();
 
+    
+
 }
 
 std::vector<Vertex>& OBJLoader::getVertices()
@@ -246,3 +248,4 @@ Hitbox& OBJLoader::getHitboxes(std::string name)
     }
     std::cout << "Cannot find: " << name << std::endl;
 }
+
