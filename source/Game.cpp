@@ -1,5 +1,22 @@
 #include "Game.h"
 
+void Game::updateInput()
+{
+	if (glfwGetKey(Base::window, GLFW_KEY_C) == GLFW_PRESS)
+	{
+		if (this->cameraType == 0)
+		{
+			this->cameraType = 1;
+		}
+		else
+		{
+			this->cameraType = 0;
+		}
+			
+	}
+		
+}
+
 void Game::objectsInit()
 {
 	//OBJ loader init
@@ -101,6 +118,7 @@ Game::Game()
 	//Camera
 	glfwSetInputMode(Base::window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	this->camera = new Camera();
+	this->cameraType = 0;
 	
 	this->objectsInit();
 }
@@ -113,12 +131,14 @@ Game::~Game()
 	delete this->rover;
 }
 
-
 void Game::run()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	this->camera->updateFreeCam();
-	//this->camera->updateThirdPersCam(this->rover->getOrigin(), -this->rover->getYaw() + 90, 30.f);
+
+	this->updateInput();
+	
+	if(this->cameraType == 0) this->camera->updateThirdPersCam(this->rover->getOrigin(), -this->rover->getYaw() + 90, 30.f);
+	else if(this->cameraType == 1) this->camera->updateFreeCam();
 
 	this->drawObjects();
 	

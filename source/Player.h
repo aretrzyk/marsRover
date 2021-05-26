@@ -24,6 +24,11 @@ private:
 	float friction;
 
 	glm::vec3 lastFrontLeftWheelPos;
+	glm::vec3 lastFrontRightWheelPos;
+	glm::vec3 lastMiddleLeftWheelPos;
+	glm::vec3 lastMiddleRightWheelPos;
+	glm::vec3 lastBackLeftWheelPos;
+	glm::vec3 lastBackRightWheelPos;
 
 	float wheelRadius;
 

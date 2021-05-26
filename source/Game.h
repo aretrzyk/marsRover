@@ -18,7 +18,9 @@ private:
 	Object* sun;
 	Player* rover;
 
-	float test = 0;
+	unsigned int cameraType;
+
+	void updateInput();
 
 	void objectsInit();
 	void drawObjects();
@@ -27,8 +29,5 @@ public:
 	Game();
 	~Game();
 	void run();
-
-	glm::vec3 getLightPos()const;
-	glm::vec3 getLightColor()const;
 };
 

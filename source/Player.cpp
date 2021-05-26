@@ -111,28 +111,56 @@ void Player::update()
 	//save << this->frontLeftWheel->getOrigin().x << " " << this->frontLeftWheel->getOrigin().z << " " << this->frontRightWheel->getOrigin().x << " " << this->frontRightWheel->getOrigin().z << std::endl;
 	//save.close();
 
-
-	glm::vec3 frontLeftWheelVec = this->lastFrontLeftWheelPos - this->frontLeftWheel->getOrigin();
-	this->lastFrontLeftWheelPos = this->frontLeftWheel->getOrigin();
-
-	float frontLeftWheelRot = glm::length(frontLeftWheelVec) * 360 / (2 * glm::pi<float>() * this->wheelRadius);
-
 	//std::cout << frontLeftWheelRot << std::endl;
+
+	this->rotateWheels();
 
 	this->move(vec);
 	this->rotYaw(rotation);
 
-	this->frontLeftWheel->rotByOriginPitch(frontLeftWheelRot);
+	
 }
 
 void Player::rotateWheels()
 {
-	//this->frontLeftWheel->rotByOriginPitch(-100);
-	this->frontRightWheel->rotByOriginPitch(-100);
-	this->middleLeftWheel->rotByOriginPitch(-100);
-	this->middleRightWheel->rotByOriginPitch(-100);
-	this->backLeftWheel->rotByOriginPitch(-100);
-	this->backRightWheel->rotByOriginPitch(-100);
+
+	glm::vec3 frontLeftWheelVec = this->lastFrontLeftWheelPos - this->frontLeftWheel->getOrigin();
+	glm::vec3 frontRightWheelVec = this->lastFrontRightWheelPos - this->frontRightWheel->getOrigin();
+
+	glm::vec3 middleLeftWheelVec = this->lastMiddleLeftWheelPos - this->middleLeftWheel->getOrigin();
+	glm::vec3 middleRightWheelVec = this->lastMiddleRightWheelPos - this->middleRightWheel->getOrigin();
+
+	glm::vec3 backLeftWheelVec = this->lastBackLeftWheelPos - this->backLeftWheel->getOrigin();
+	glm::vec3 backRightWheelVec = this->lastBackRightWheelPos - this->backRightWheel->getOrigin();
+
+	this->lastFrontLeftWheelPos = this->frontLeftWheel->getOrigin();
+	this->lastFrontRightWheelPos = this->frontRightWheel->getOrigin();
+
+	this->lastMiddleLeftWheelPos = this->middleLeftWheel->getOrigin();
+	this->lastMiddleRightWheelPos = this->middleRightWheel->getOrigin();
+
+	this->lastBackLeftWheelPos = this->backLeftWheel->getOrigin();
+	this->lastBackRightWheelPos = this->backRightWheel->getOrigin();
+
+	float value = 360 / (2 * glm::pi<float>() * this->wheelRadius);
+
+	if (this->speed < 0) value = -value;
+
+	float frontLeftWheelRot = glm::length(frontLeftWheelVec) * value;
+	float frontRightWheelRot = glm::length(frontRightWheelVec) * value;
+
+	float middleLeftWheelRot = glm::length(middleLeftWheelVec) * value;
+	float middleRightWheelRot = glm::length(middleRightWheelVec) * value;
+
+	float backLeftWheelRot = glm::length(backLeftWheelVec) * value;
+	float backRightWheelRot = glm::length(backRightWheelVec) * value;
+
+	this->frontLeftWheel->rotByOriginPitch(frontLeftWheelRot);
+	this->frontRightWheel->rotByOriginPitch(frontRightWheelRot);
+	this->middleLeftWheel->rotByOriginPitch(middleLeftWheelRot);
+	this->middleRightWheel->rotByOriginPitch(middleRightWheelRot);
+	this->backLeftWheel->rotByOriginPitch(backLeftWheelRot);
+	this->backRightWheel->rotByOriginPitch(backRightWheelRot);
 }
 
 void Player::rotYaw(float angle)
