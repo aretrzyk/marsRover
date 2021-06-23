@@ -14,7 +14,7 @@ private:
 	//Kamera
 	Camera* camera;
 
-	Object* floor;
+	Map* map;
 	Object* sun;
 	Player* rover;
 

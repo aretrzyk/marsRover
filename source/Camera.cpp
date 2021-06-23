@@ -96,7 +96,7 @@ Camera::Camera()
 	
 	this->fov = 90.f;
 	this->nearPlane = 0.1f;
-	this->farPlane = 100.f;
+	this->farPlane = 1000.f;
 
 	this->yaw = 0;
 	this->pitch = 0;

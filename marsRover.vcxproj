@@ -148,9 +148,12 @@
   <ItemGroup>
     <ClCompile Include="source\Base.cpp" />
     <ClCompile Include="source\Camera.cpp" />
+    <ClCompile Include="source\Face.cpp" />
     <ClCompile Include="source\Game.cpp" />
+    <ClCompile Include="source\HeightMap.cpp" />
     <ClCompile Include="source\Hitbox.cpp" />
     <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\Map.cpp" />
     <ClCompile Include="source\Object.cpp" />
     <ClCompile Include="source\OBJLoader.cpp" />
     <ClCompile Include="source\Player.cpp" />
@@ -159,10 +162,15 @@
     <ClCompile Include="source\Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="source\Base.h" />
     <ClInclude Include="source\Camera.h" />
+    <ClInclude Include="source\Face.h" />
     <ClInclude Include="source\Game.h" />
+    <ClInclude Include="source\HeightMap.h" />
     <ClInclude Include="source\Hitbox.h" />
+    <ClInclude Include="source\Map.h" />
     <ClInclude Include="source\Object.h" />
     <ClInclude Include="source\OBJLoader.h" />
     <ClInclude Include="source\Player.h" />
@@ -184,6 +192,12 @@
     <Object Include="res\models\testFloor.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </Object>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="marsRover.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -17,7 +17,10 @@
 #include <GLM/mat4x4.hpp>
 #include <GLM/gtc/matrix_transform.hpp>
 #include <GLM/gtc/type_ptr.hpp>
-#include <GLM/gtc/constants.hpp >
+#include <GLM/gtc/constants.hpp>
+#include <GLM/gtx/intersect.hpp>
+#include <GLM/gtx/normal.hpp >
+#include <GLM/gtx/vector_angle.hpp >
 
 
 class Base

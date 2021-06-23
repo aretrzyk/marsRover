@@ -27,13 +27,9 @@ private:
 
 	glm::vec3 rotVec;
 	glm::vec3 rotByOriginVec;
-	//TODO: add if needed
-	//glm::vec3 vecRotByPoint; 
-	
-
-	glm::vec3 lightPos;
 
 	Hitbox hitbox;
+	std::vector<Face>* faces;
 
 	int hitboxIndicesNumber;
 	glm::vec4 hitboxColor;
@@ -53,8 +49,12 @@ public:
 	void setColor(glm::vec3 color);
 	void setColor(glm::vec4 color);
 
+	void setSize(glm::vec3 size);
+
 	void move(glm::vec3 vec);
 	void setPos(glm::vec3 vec);
+
+	void setY(float y);
 
 	void rot(glm::vec3 angles);
 	void setRot(glm::vec3 angles);
@@ -63,6 +63,12 @@ public:
 
 	void rotYaw(float angle);
 	void setRotYaw(float angle);
+
+	void rotPitch(float angle);
+	void setRotPitch(float angle);
+
+	void rotRoll(float angle);
+	void setRotRoll(float angle);
 
 	void rotByOriginPitch(float angle);
 	void setRotByOriginPitch(float angle);

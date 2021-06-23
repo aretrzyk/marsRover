@@ -57,19 +57,22 @@ void Object::updateModelMatrix()
     this->modelMatrix = glm::mat4(1.f);
     this->rotByOriginMatrix = glm::mat4(1.f);
 
-    glm::scale(this->modelMatrix, this->scaleVec);
+    
 
     this->modelMatrix = glm::translate(this->modelMatrix, this->posVec);
 
-    this->modelMatrix = glm::rotate(this->modelMatrix, glm::radians(this->rotVec.x), glm::vec3(1.f, 0.f, 0.f));
     this->modelMatrix = glm::rotate(this->modelMatrix, glm::radians(this->rotVec.y), glm::vec3(0.f, 1.f, 0.f));
     this->modelMatrix = glm::rotate(this->modelMatrix, glm::radians(this->rotVec.z), glm::vec3(0.f, 0.f, 1.f));
+    this->modelMatrix = glm::rotate(this->modelMatrix, glm::radians(this->rotVec.x), glm::vec3(1.f, 0.f, 0.f));
+    
 
     this->rotByOriginMatrix = glm::translate(this->rotByOriginMatrix, this->hitbox.getOrigin());
     this->rotByOriginMatrix = glm::rotate(this->rotByOriginMatrix, glm::radians(this->rotByOriginVec.z), glm::vec3(0.f, 0.f, 1.f));
     this->rotByOriginMatrix = glm::rotate(this->rotByOriginMatrix, glm::radians(this->rotByOriginVec.y), glm::vec3(0.f, 1.f, 0.f));
     this->rotByOriginMatrix = glm::rotate(this->rotByOriginMatrix, glm::radians(this->rotByOriginVec.x), glm::vec3(1.f, 0.f, 0.f));
     this->rotByOriginMatrix = glm::translate(this->rotByOriginMatrix, -this->hitbox.getOrigin());
+
+    this->modelMatrix = glm::scale(this->modelMatrix, this->scaleVec);
 
 }
 
@@ -101,6 +104,7 @@ Object::Object()
 
 }
 
+
 Object::Object(std::vector<Vertex> vertices, Hitbox hitbox) : Object()
 {
     this->load(vertices);
@@ -125,6 +129,11 @@ void Object::setColor(glm::vec4 color)
     this->objectColor = color;
 }
 
+void Object::setSize(glm::vec3 size)
+{
+    this->scaleVec = size;
+}
+
 void Object::move(glm::vec3 vec)
 {
     this->posVec += vec;
@@ -133,6 +142,11 @@ void Object::move(glm::vec3 vec)
 void Object::setPos(glm::vec3 vec)
 {
     this->posVec = vec;
+}
+
+void Object::setY(float y)
+{
+    this->posVec.y = y;
 }
 
 void Object::rot(glm::vec3 angles)
@@ -165,6 +179,26 @@ void Object::setRotYaw(float angle)
     this->rotVec.y = angle;
 }
 
+void Object::rotPitch(float angle)
+{
+    this->rotVec.x += angle;
+}
+
+void Object::setRotPitch(float angle)
+{
+    this->rotVec.x = angle;
+}
+
+void Object::rotRoll(float angle)
+{
+    this->rotVec.z += angle;
+}
+
+void Object::setRotRoll(float angle)
+{
+    this->rotVec.z = angle;
+}
+
 void Object::rotByOriginPitch(float angle)
 {
     this->rotByOriginVec.x += angle;
@@ -187,11 +221,13 @@ void Object::setRotByOriginYaw(float angle)
 
 glm::vec3 Object::getPos()
 {
+    this->updateModelMatrix();
     return glm::vec3(this->modelMatrix * glm::vec4(0,0,0,1));
 }
 
 glm::vec3 Object::getOrigin()
 {
+    this->updateModelMatrix();
     return glm::vec3(this->modelMatrix * glm::vec4(this->hitbox.getOrigin(), 1.f));
 }
 

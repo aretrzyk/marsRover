@@ -20,14 +20,16 @@ void Game::updateInput()
 void Game::objectsInit()
 {
 	//OBJ loader init
-	OBJLoader vCube("res/models/cube.obj");
-	OBJLoader vFloor("res/models/testFloor.obj");
-	OBJLoader vRover("res/models/lazik.obj");
+	OBJLoader objFloor("res/models/raceMap.obj");
+	OBJLoader objCube("res/models/cube.obj");
+	OBJLoader objRover("res/models/lazik.obj");
 
 	//Object init
-	this->rover = new Player(vRover);
-	this->sun = new Object(vCube.getVertices(), vCube.getHitboxes());
-	this->floor = new Object(vFloor.getVertices(), vCube.getHitboxes());
+	this->sun = new Object(objCube.getVertices(), objCube.getHitboxes());
+	this->map = new Map(objFloor);
+	this->rover = new Player(objRover, this->map);
+
+	
 
 	//Objects presets 
 	//Rover
@@ -35,11 +37,11 @@ void Game::objectsInit()
 
 	//Sun
 	this->sun->setColor(glm::vec4(Base::lightColor, 0.5));
-	this->sun->move(glm::vec3(0, 2, 0));
+	this->sun->move(glm::vec3(0, 120, 0));
 	
 	//Floor
-	this->floor->setColor(glm::vec3(1, 0.2, 0.2));
-	this->floor->setPos(glm::vec3(0, 0, 0));
+	this->map->setColor(glm::vec3(1, 0.2, 0.2));
+	this->map->setPos(glm::vec3(0, 0, 0));
 
 }
 
@@ -58,7 +60,7 @@ void Game::drawObjects()
 	//this->sun->drawHitbox();
 	//this->sun->draw();
 
-	this->floor->draw();
+	this->map->draw();
 
 }
 
@@ -127,7 +129,7 @@ Game::~Game()
 {
 	delete this->camera;
 	delete this->sun;
-	delete this->floor;
+	delete this->map;
 	delete this->rover;
 }
 

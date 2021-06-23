@@ -14,6 +14,18 @@ void OBJLoader::buildMesh()
     hitboxTemp.zMin = pos[posElements[0]].z;
     hitboxTemp.zMax = pos[posElements[0]].z;
 
+    if (firstHitbox)
+    {
+        this->mainHitbox.xMin = hitboxTemp.xMin;
+        this->mainHitbox.xMax = hitboxTemp.xMax;
+
+        this->mainHitbox.yMin = hitboxTemp.yMin;
+        this->mainHitbox.yMax = hitboxTemp.yMax;
+
+        this->mainHitbox.zMin = hitboxTemp.zMin;
+        this->mainHitbox.zMax = hitboxTemp.zMax;
+    }
+
     for (int i = 0; i < posElements.size(); i++)
     {
         Vertex temp;
@@ -36,6 +48,16 @@ void OBJLoader::buildMesh()
         if (hitboxTemp.zMax < pos[posElements[i]].z) hitboxTemp.zMax = pos[posElements[i]].z;
 
     }   
+
+    if (this->mainHitbox.xMin > hitboxTemp.xMin) this->mainHitbox.xMin = hitboxTemp.xMin;
+    if (this->mainHitbox.xMax > hitboxTemp.xMax) this->mainHitbox.xMax = hitboxTemp.xMax;
+
+    if (this->mainHitbox.yMin > hitboxTemp.yMin) this->mainHitbox.yMin = hitboxTemp.yMin;
+    if (this->mainHitbox.yMax > hitboxTemp.yMax) this->mainHitbox.yMax = hitboxTemp.yMax;
+
+    if (this->mainHitbox.zMin > hitboxTemp.zMin) this->mainHitbox.zMin = hitboxTemp.zMin;
+    if (this->mainHitbox.zMax > hitboxTemp.zMax) this->mainHitbox.zMax = hitboxTemp.zMax;
+
     hitboxTemp.size = glm::vec3(
         hitboxTemp.xMax - hitboxTemp.xMin,
         hitboxTemp.yMax - hitboxTemp.yMin,
@@ -48,10 +70,6 @@ void OBJLoader::buildMesh()
         );
 
     this->vertices.push_back(verticesTemp);
-    this->posElements.clear();
-    this->texcoordsElements.clear();
-    this->normalsElements.clear();
-
     this->hitboxes.push_back(hitboxTemp);
 
 }
@@ -62,11 +80,10 @@ OBJLoader::OBJLoader(std::string path)
     if (!file)
     {
         std::cout << "Cannot open " << path << std::endl;
+        return;
     }
 
     bool firstObject = true;
-
-    
 
     std::string line;
     while (getline(file, line))
@@ -84,6 +101,9 @@ OBJLoader::OBJLoader(std::string path)
             }
             
             this->buildMesh();
+            this->posElements.clear();
+            this->texcoordsElements.clear();
+            this->normalsElements.clear();
 
             std::istringstream ss(line.substr(2));
             std::string objectName;
@@ -107,8 +127,7 @@ OBJLoader::OBJLoader(std::string path)
             GLuint a, b, c;
             GLint atexcoord, btexcoord, ctexcoord;
             GLuint anormal, bnormal, cnormal;
-            GLuint temp;
-            
+     
             ss >> a;
             if (ss.peek() == '/')
             {
@@ -225,6 +244,37 @@ Hitbox& OBJLoader::getHitboxes()
     return this->hitboxes[0];
 }
 
+std::vector<Face> OBJLoader::getFaces()
+{
+
+    std::vector<Face> faces;
+
+    for (int i = 0; i < posElements.size(); i+=3)
+    {
+        Face faceTemp(vertices[0][i].pos, vertices[0][i+1].pos, vertices[0][i+2].pos, normals[normalsElements[i]]);
+        faces.push_back(faceTemp);
+    }
+
+    return faces;
+
+}
+
+Hitbox& OBJLoader::getMainHitbox()
+{
+    this->mainHitbox.size = glm::vec3(
+        this->mainHitbox.xMax - this->mainHitbox.xMin,
+        this->mainHitbox.yMax - this->mainHitbox.yMin,
+        this->mainHitbox.zMax - this->mainHitbox.zMin
+    );
+    this->mainHitbox.origin = glm::vec3(
+        this->mainHitbox.xMax - this->mainHitbox.size.x / 2,
+        this->mainHitbox.yMax - this->mainHitbox.size.y / 2,
+        this->mainHitbox.zMax - this->mainHitbox.size.z / 2
+    );
+    return this->mainHitbox;
+}
+
+
 std::vector<Vertex>& OBJLoader::getVertices(std::string name)
 {
     for (int i = 0; i < this->vertices.size(); i++)
@@ -239,7 +289,7 @@ std::vector<Vertex>& OBJLoader::getVertices(std::string name)
 
 Hitbox& OBJLoader::getHitboxes(std::string name)
 {
-    for (int i = 0; i < this->hitboxes.size(); i++)
+    for (int i = 0; i < this->vertices.size(); i++)
     {
         if (this->names[i] == name)
         {
@@ -248,4 +298,3 @@ Hitbox& OBJLoader::getHitboxes(std::string name)
     }
     std::cout << "Cannot find: " << name << std::endl;
 }
-

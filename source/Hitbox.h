@@ -3,6 +3,7 @@
 
 class OBJLoader;
 class Object;
+class CubeColider;
 
 class Hitbox
 {
@@ -23,8 +24,11 @@ public:
 
 	glm::vec3 getOrigin();
 	glm::vec3 getSize();
+	glm::vec3 getMin();
+	glm::vec3 getMax();
 
 
 	friend OBJLoader;
 	friend Object;
+	friend CubeColider;
 };

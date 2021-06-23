@@ -10,7 +10,7 @@ Hitbox::Hitbox()
 	this->zMax = 0;
 
 	this->size = glm::vec3(0);
-	this->origin = glm::dvec3(0);
+	this->origin = glm::vec3(0);
 }
 
 
@@ -28,4 +28,14 @@ glm::vec3 Hitbox::getOrigin()
 glm::vec3 Hitbox::getSize()
 {
 	return this->size;
+}
+
+glm::vec3 Hitbox::getMin()
+{
+	return glm::vec3(this->xMin, this->yMin, this->zMin);
+}
+
+glm::vec3 Hitbox::getMax()
+{
+	return glm::vec3(this->xMax, this->yMax, this->zMax);
 }
